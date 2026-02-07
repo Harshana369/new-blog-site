@@ -1,6 +1,6 @@
 import LocalDate from '@/components/LocalDate'
 import PaginationWrapper from '@/components/PaginationWrapper'
-import { getAllPosts } from '@/data/posts'
+import { getAllPosts, type TPost } from '@/data/posts'
 import { Badge } from '@/shared/Badge'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -37,7 +37,7 @@ const Page = async () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {posts.map((post) => (
+              {posts.map((post: TPost) => (
                 <tr key={post.id}>
                   <td className="py-5 pr-3 pl-4 text-sm whitespace-nowrap sm:pl-0">
                     <div className="flex items-center">

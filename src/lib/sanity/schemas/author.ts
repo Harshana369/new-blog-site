@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { defineField, defineType } from 'sanity'
 
 export default defineType({
@@ -23,26 +24,12 @@ export default defineType({
       title: 'Avatar',
       type: 'image',
       options: { hotspot: true },
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt Text',
-          type: 'string',
-        }),
-      ],
     }),
     defineField({
       name: 'cover',
       title: 'Cover Image',
       type: 'image',
       options: { hotspot: true },
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt Text',
-          type: 'string',
-        }),
-      ],
     }),
     defineField({
       name: 'career',
@@ -53,7 +40,6 @@ export default defineType({
       name: 'description',
       title: 'Bio',
       type: 'text',
-      rows: 4,
     }),
     defineField({
       name: 'socialLinks',

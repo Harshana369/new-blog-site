@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default async function ReviewsPage() {
   const allPosts = await getAllPosts()
-  const reviewPosts = allPosts.filter((post) => post.postType === 'review')
+  const reviewPosts = allPosts.filter((post: TPost) => post.postType === 'review')
   // If no review posts yet, show standard posts as placeholder
   const posts: TPost[] = reviewPosts.length > 0 ? reviewPosts : allPosts.slice(0, 12)
 

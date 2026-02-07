@@ -1,4 +1,5 @@
 import { TCategory } from '@/data/categories'
+import type { TPost } from '@/data/posts'
 import { Badge } from '@/shared/Badge'
 import HeadingWithSub, { HeadingWithSubProps } from '@/shared/Heading'
 import { ArrowRightIcon } from '@heroicons/react/24/solid'
@@ -31,8 +32,8 @@ const SectionMagazine11: FC<Props> = ({ className, categories, subHeading, dimHe
         {posts[0] && <Card18 ratio="aspect-4/3" className="shrink-0" post={posts[0]} />}
         <ul className="flex flex-col gap-y-4">
           {posts
-            .filter((_, i) => i > 0)
-            .map((post) => (
+            .filter((_: unknown, i: number) => i > 0)
+            .map((post: TPost) => (
               <li key={post.handle}>
                 <div className="flex items-start gap-x-3.5">
                   <Badge className="mt-2 size-2.5! shrink-0 rounded-sm p-0!" color={color as any}>

@@ -11,6 +11,7 @@ import RatingBreakdown from '@/components/Review/RatingBreakdown'
 import ReviewVerdict from '@/components/Review/ReviewVerdict'
 import SingleCommentForm from '@/components/SingleCommentForm'
 import { TComment, TPostDetail } from '@/data/posts'
+import type { TAffiliateLink } from '@/data/types'
 import useIntersectionObserver from '@/hooks/useIntersectionObserver'
 import Avatar from '@/shared/Avatar'
 import ButtonPrimary from '@/shared/ButtonPrimary'
@@ -120,7 +121,7 @@ const SingleContentContainer: FC<Props> = ({ post, comments, className }) => {
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold">Where to Buy</h3>
                 <div className="flex flex-wrap gap-3">
-                  {post.product.affiliateLinks.map((link, i) => (
+                  {post.product.affiliateLinks.map((link: TAffiliateLink, i: number) => (
                     <AffiliateButton key={i} link={link} />
                   ))}
                 </div>
@@ -168,7 +169,7 @@ const SingleContentContainer: FC<Props> = ({ post, comments, className }) => {
         {/* COMMENTS LIST */}
         <div className="mx-auto max-w-(--breakpoint-md)">
           <ul className="single-comment-lists space-y-5">
-            {comments.map((comment) => (
+            {comments.map((comment: TComment) => (
               <CommentCard key={comment.id} comment={comment} />
             ))}
             <ButtonPrimary className="mt-10 w-full">View all {commentCount} comments</ButtonPrimary>

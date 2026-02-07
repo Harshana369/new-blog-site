@@ -4,7 +4,7 @@ import ModalTags from '@/components/ModalTags'
 import PaginationWrapper from '@/components/PaginationWrapper'
 import Card10V2 from '@/components/PostCards/Card10V2'
 import { getCategories, getCategoryByHandle, getTags } from '@/data/categories'
-import { getPostsVideo } from '@/data/posts'
+import { getPostsVideo, type TPost } from '@/data/posts'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import PageHeader from '../../page-header'
@@ -61,7 +61,7 @@ const Page = async ({ params }: { params: Promise<{ handle: string }> }) => {
 
         {/* LOOP ITEMS */}
         <div className="mt-8 grid gap-x-6 gap-y-8 sm:grid-cols-2 md:gap-x-8 md:gap-y-10 lg:mt-10 lg:grid-cols-3">
-          {posts.map((post) => (
+          {posts.map((post: TPost) => (
             <Card10V2 ratio="aspect-square sm:aspect-16/9" key={post.id} post={post} />
           ))}
         </div>

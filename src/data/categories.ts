@@ -169,10 +169,10 @@ export async function getTagByHandle(handle: string) {
 }
 
 // Types
-export type TCategory = Awaited<ReturnType<typeof getCategories>>[number] & {
+export type TCategory = ReturnType<typeof _getStaticCategories>[number] & {
   posts?: TPost[]
 }
 
-export type TTag = Awaited<ReturnType<typeof getTags>>[number] & {
+export type TTag = ReturnType<typeof _getStaticTags>[number] & {
   posts?: TPost[]
 }

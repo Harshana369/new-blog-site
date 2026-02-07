@@ -75,4 +75,4 @@ export async function getAuthorByHandle(handle: string) {
   return author
 }
 
-export type TAuthor = Awaited<ReturnType<typeof getAuthors>>[number]
+export type TAuthor = ReturnType<typeof _getStaticAuthors>[number]

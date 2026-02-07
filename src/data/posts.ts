@@ -320,12 +320,19 @@ export async function getCommentsByPostId(_postId: string) {
 }
 
 // Types
-export type TPost = Awaited<ReturnType<typeof getAllPosts>>[number] & {
+export type TPost = ReturnType<typeof _getStaticPostsDefault>[number] & {
   audioUrl?: string
   videoUrl?: string
   galleryImgs?: string[]
   reviewData?: TReviewData
   product?: TProduct
 }
-export type TPostDetail = Awaited<ReturnType<typeof getPostByHandle>>
+export type TPostDetail = TPost & {
+  content: string
+  galleryImgs: string[]
+  videoUrl: string
+  audioUrl: string
+  tags: { id: string; name: string; handle: string; color: string }[]
+  author: TPost['author'] & { description: string }
+}
 export type TComment = Awaited<ReturnType<typeof getCommentsByPostId>>[number]

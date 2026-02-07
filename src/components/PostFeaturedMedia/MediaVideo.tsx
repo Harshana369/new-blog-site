@@ -21,7 +21,7 @@ const MediaVideo: FC<Props> = ({ videoUrl, isHover, handle }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isRendered, setIsRendered] = useState(false)
   let __timeOut: NodeJS.Timeout | null = null
-  const playerRef = useRef<ReactPlayer | null>(null)
+  const playerRef = useRef<any>(null)
 
   useEffect(() => {
     if (isHover) {

@@ -5,7 +5,7 @@ import PaginationWrapper from '@/components/PaginationWrapper'
 import Card15Podcast from '@/components/PostCards/Card15Podcast'
 import Card16Podcast from '@/components/PostCards/Card16Podcast'
 import { getCategories, getCategoryByHandle, getTags } from '@/data/categories'
-import { getPostsAudio } from '@/data/posts'
+import { getPostsAudio, type TPost } from '@/data/posts'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import PageHeader from '../../page-header'
@@ -62,12 +62,12 @@ const Page = async ({ params }: { params: Promise<{ handle: string }> }) => {
 
         {/* LOOP ITEMS */}
         <div className="mt-8 grid gap-6 md:grid-cols-2 md:gap-8 lg:mt-10 lg:grid-cols-3">
-          {posts.slice(0, 3).map((post) => (
+          {posts.slice(0, 3).map((post: TPost) => (
             <Card16Podcast key={post.id} post={post} />
           ))}
           <div className="md:col-span-2 lg:col-span-3">
             <div className="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-              {posts.slice(3).map((post) => (
+              {posts.slice(3).map((post: TPost) => (
                 <Card15Podcast key={post.id} post={post} />
               ))}
             </div>
