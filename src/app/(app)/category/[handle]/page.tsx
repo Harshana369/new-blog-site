@@ -5,6 +5,7 @@ import ModalTags from '@/components/ModalTags'
 import PaginationWrapper from '@/components/PaginationWrapper'
 import Card11 from '@/components/PostCards/Card11'
 import { getCategories, getCategoryByHandle, getTags } from '@/data/categories'
+import type { TPost } from '@/data/posts'
 import { generateBreadcrumbLD } from '@/lib/structured-data'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -71,7 +72,7 @@ const Page = async ({ params }: { params: Promise<{ handle: string }> }) => {
 
         {/* LOOP ITEMS */}
         <div className="mt-8 grid gap-6 sm:grid-cols-2 md:gap-7 lg:mt-10 lg:grid-cols-3 xl:grid-cols-4">
-          {posts.map((post) => (
+          {posts.map((post: TPost) => (
             <Card11 key={post.id} post={post} />
           ))}
         </div>
