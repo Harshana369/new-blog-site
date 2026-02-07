@@ -35,7 +35,7 @@ const Page = async () => {
         heading="Top trending topics"
         categoryCardType="card5"
         subHeading="Discover over 112 topics"
-        categories={categories.filter((_, i) => i < 10)}
+        categories={categories.filter((_: unknown, i: number) => i < 10)}
       />
 
       <div className="relative py-16 lg:py-20">
