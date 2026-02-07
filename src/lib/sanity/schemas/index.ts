@@ -1,0 +1,9 @@
+import author from './author'
+import category from './category'
+import post from './post'
+import product from './product'
+import review from './review'
+import siteSettings from './siteSettings'
+import tag from './tag'
+
+export const schemaTypes = [post, author, category, tag, product, review, siteSettings]
