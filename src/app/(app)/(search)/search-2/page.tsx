@@ -5,6 +5,9 @@ import CardCategory2 from '@/components/CategoryCards/CardCategory2'
 import PaginationWrapper from '@/components/PaginationWrapper'
 import Card11 from '@/components/PostCards/Card11'
 import { getSearchResults } from '@/data/search'
+import type { TPost } from '@/data/posts'
+import type { TCategory, TTag } from '@/data/categories'
+import type { TAuthor } from '@/data/authors'
 import Input from '@/shared/Input'
 import Tag from '@/shared/Tag'
 import { Folder02Icon, LicenseIcon, Search01Icon, Tag02Icon, UserListIcon } from '@hugeicons/core-free-icons'
@@ -85,14 +88,14 @@ const PageSearch = async ({
       case 'categories':
         return (
           <div className="mt-8 grid grid-cols-2 gap-5 sm:grid-cols-3 md:gap-8 lg:mt-10 lg:grid-cols-4 xl:grid-cols-5">
-            {categories?.map((category) => <CardCategory2 key={category.id} category={category} />)}
+            {categories?.map((category: TCategory) => <CardCategory2 key={category.id} category={category} />)}
           </div>
         )
 
       case 'tags':
         return (
           <div className="mt-12 flex flex-wrap gap-3">
-            {tags?.map((tag) => (
+            {tags?.map((tag: TTag) => (
               <Tag key={tag.id} href={`/tag/${tag.handle}`}>
                 {tag.name}
               </Tag>
@@ -102,7 +105,7 @@ const PageSearch = async ({
       case 'authors':
         return (
           <div className="mt-8 grid grid-cols-2 gap-5 sm:grid-cols-3 md:gap-8 lg:mt-10 lg:grid-cols-4 xl:grid-cols-5">
-            {authors?.map((author) => (
+            {authors?.map((author: TAuthor) => (
               <CardAuthorBox2 className="border border-dashed" key={author.id} author={author} />
             ))}
           </div>
@@ -110,7 +113,7 @@ const PageSearch = async ({
       default:
         return (
           <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-8 lg:mt-10 lg:grid-cols-3 xl:grid-cols-4">
-            {posts?.map((post) => <Card11 key={post.id} post={post} />)}
+            {posts?.map((post: TPost) => <Card11 key={post.id} post={post} />)}
           </div>
         )
     }
