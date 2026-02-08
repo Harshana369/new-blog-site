@@ -42,7 +42,8 @@ export async function getCategories() {
     try {
       const categories = await sanityFetch<TCategory[]>({ query: categoriesQuery, tags: ['categories'] })
       return categories || []
-    } catch {
+    } catch (error) {
+      console.error('[getCategories] Failed to fetch categories:', error)
       return []
     }
   }

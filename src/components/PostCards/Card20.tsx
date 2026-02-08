@@ -10,7 +10,7 @@ const Card20 = ({ post, className }: { post: TPost; className?: string }) => {
   return (
     <article key={post.id} className={clsx('group flex flex-col items-start justify-between', className)}>
       <div className="relative w-full">
-        {featuredImage.src && (
+        {featuredImage?.src && (
           <Image
             alt={title}
             src={featuredImage}

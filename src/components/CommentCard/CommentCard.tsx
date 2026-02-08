@@ -85,7 +85,7 @@ const CommentCard: FC<Props> = ({ className, comment }) => {
   return (
     <>
       <div className={clsx(`comment-card flex ${className}`)}>
-        <Avatar className="size-8 rounded-full" src={author.avatar.src} width={32} height={32} sizes="32px" />
+        <Avatar className="size-8 rounded-full" src={author.avatar?.src} width={32} height={32} sizes="32px" />
         <div className="ms-2 flex grow flex-col rounded-xl border border-neutral-200 p-4 text-sm sm:ms-3 sm:text-base dark:border-neutral-700">
           {/* AUTHOR INFOR */}
           <div className="relative flex items-center pe-6">

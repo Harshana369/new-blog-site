@@ -175,7 +175,8 @@ export async function getPostsDefault() {
         tags: ['posts'],
       })
       return posts || []
-    } catch {
+    } catch (error) {
+      console.error('[getPostsDefault] Failed to fetch posts:', error)
       return []
     }
   }
@@ -191,7 +192,8 @@ export async function getPostsAudio() {
         tags: ['posts'],
       })
       return posts || []
-    } catch {
+    } catch (error) {
+      console.error('[getPostsAudio] Failed to fetch posts:', error)
       return []
     }
   }
@@ -207,7 +209,8 @@ export async function getPostsVideo() {
         tags: ['posts'],
       })
       return posts || []
-    } catch {
+    } catch (error) {
+      console.error('[getPostsVideo] Failed to fetch posts:', error)
       return []
     }
   }
@@ -223,7 +226,8 @@ export async function getPostsGallery() {
         tags: ['posts'],
       })
       return posts || []
-    } catch {
+    } catch (error) {
+      console.error('[getPostsGallery] Failed to fetch posts:', error)
       return []
     }
   }
@@ -235,7 +239,8 @@ export async function getAllPosts() {
     try {
       const posts = await sanityFetch<TPost[]>({ query: postsQuery, tags: ['posts'] })
       return posts || []
-    } catch {
+    } catch (error) {
+      console.error('[getAllPosts] Failed to fetch posts:', error)
       return []
     }
   }
@@ -253,7 +258,8 @@ export async function getPostByHandle(handle: string): Promise<TPostDetail | nul
         tags: ['posts'],
       })
       return post || null
-    } catch {
+    } catch (error) {
+      console.error('[getPostByHandle] Failed to fetch post:', handle, error)
       return null
     }
   }

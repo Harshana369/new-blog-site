@@ -48,7 +48,7 @@ export const postsQuery = groq`
   postType,
   status,
   "author": author->${authorMiniProjection},
-  "categories": categories[]->{ ${categoryMiniProjection} },
+  "categories": categories[]->${categoryMiniProjection},
   "audioUrl": audioUrl,
   "videoUrl": videoUrl,
   "galleryImgs": galleryImages[].asset->url
@@ -72,7 +72,7 @@ export const postsByTypeQuery = groq`
   postType,
   status,
   "author": author->${authorMiniProjection},
-  "categories": categories[]->{ ${categoryMiniProjection} },
+  "categories": categories[]->${categoryMiniProjection},
   "audioUrl": audioUrl,
   "videoUrl": videoUrl,
   "galleryImgs": galleryImages[].asset->url

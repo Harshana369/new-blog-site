@@ -41,7 +41,7 @@ const Card14: FC<Props> = ({ className, ratio = 'aspect-1/1', post }) => {
 
         <div className="mt-4 flex flex-wrap items-center text-xs/6 font-medium">
           <div className="relative flex gap-x-2">
-            <Avatar className="size-6" src={author.avatar.src} alt={author.name} width={24} height={24} sizes="24px" />
+            <Avatar className="size-6" src={author.avatar?.src} alt={author.name} width={24} height={24} sizes="24px" />
             <span className="block text-white">{author.name}</span>
             <Link href={`/author/${author.handle}`} className="absolute inset-0"></Link>
           </div>

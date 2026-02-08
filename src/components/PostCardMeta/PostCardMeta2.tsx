@@ -15,7 +15,7 @@ const PostCardMeta2: FC<Props> = ({ meta, className, avatarSize }) => {
   const { date, author, title, handle } = meta
   return (
     <div className={clsx('post-card-meta-2 relative flex gap-2 text-xs/6', className)}>
-      <Avatar className={clsx(avatarSize, 'mt-1 size-9 shrink-0')} src={author.avatar.src} />
+      <Avatar className={clsx(avatarSize, 'mt-1 size-9 shrink-0')} src={author.avatar?.src} />
       <div>
         <h2 className={clsx('block text-base font-semibold')}>
           <Link href={`/post/${handle}`} className="line-clamp-2">

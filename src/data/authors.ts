@@ -50,7 +50,8 @@ export async function getAuthors() {
     try {
       const authors = await sanityFetch<TAuthor[]>({ query: authorsQuery, tags: ['authors'] })
       return authors || []
-    } catch {
+    } catch (error) {
+      console.error('[getAuthors] Failed to fetch authors:', error)
       return []
     }
   }
@@ -66,7 +67,8 @@ export async function getAuthorByHandle(handle: string): Promise<TAuthor | null>
         tags: ['authors'],
       })
       return author || null
-    } catch {
+    } catch (error) {
+      console.error('[getAuthorByHandle] Failed to fetch author:', handle, error)
       return null
     }
   }

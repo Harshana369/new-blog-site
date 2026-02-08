@@ -9,7 +9,8 @@ export const client = new Proxy({} as SanityClient, {
     if (!_client) {
       _client = createClient({
         ...sanityConfig,
-        useCdn: true,
+        // Don't use CDN in development to avoid stale cached data
+        useCdn: process.env.NODE_ENV === 'production',
       })
     }
     const value = (_client as any)[prop]

@@ -14,10 +14,20 @@ export async function sanityFetch<T>({
   tags = [],
   revalidate = 60,
 }: SanityFetchOptions): Promise<T> {
-  return client.fetch<T>(query, params, {
-    next: {
-      revalidate: revalidate === false ? false : revalidate,
-      tags,
-    },
-  })
+  // In development, disable caching to always get fresh data
+  const effectiveRevalidate = process.env.NODE_ENV === 'development' ? false : revalidate
+
+  try {
+    const result = await client.fetch<T>(query, params, {
+      next: {
+        revalidate: effectiveRevalidate === false ? false : effectiveRevalidate,
+        tags,
+      },
+    })
+    console.log('[sanityFetch] tags:', tags, 'result count:', Array.isArray(result) ? result.length : result ? 1 : 0)
+    return result
+  } catch (error) {
+    console.error('[sanityFetch] ERROR for tags:', tags, error)
+    throw error
+  }
 }

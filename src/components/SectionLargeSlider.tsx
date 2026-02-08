@@ -17,6 +17,11 @@ interface Props extends Pick<HeadingWithSubProps, 'subHeading' | 'dimHeading'> {
 const SectionLargeSlider: FC<Props> = ({ posts, heading, className, subHeading, dimHeading }) => {
   const [indexActive, setIndexActive] = useState(0)
 
+  // Don't render if no posts
+  if (!posts || posts.length === 0) {
+    return null
+  }
+
   const handleClickNext = () => {
     setIndexActive((state) => {
       if (state >= posts.length - 1) {
