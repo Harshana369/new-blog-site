@@ -9,6 +9,7 @@ import { getCategories, getTags } from '@/data/categories'
 import { getAllPosts, getCommentsByPostId, getPostByHandle } from '@/data/posts'
 import { generateArticleLD, generateBreadcrumbLD, generateReviewLD } from '@/lib/structured-data'
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import SingleContentContainer from '../SingleContentContainer'
 import SingleHeaderContainer from '../SingleHeaderContainer'
 import SingleRelatedPosts from '../SingleRelatedPosts'
@@ -48,6 +49,9 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
 const Page = async ({ params }: { params: Promise<{ handle: string }> }) => {
   const { handle } = await params
   const post = await getPostByHandle(handle)
+  if (!post) {
+    notFound()
+  }
   const comments = await getCommentsByPostId(post.id)
   const relatedPosts = (await getAllPosts()).slice(0, 6)
   const moreFromAuthorPosts = (await getAllPosts()).slice(1, 7)

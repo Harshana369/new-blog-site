@@ -49,13 +49,15 @@ export async function getAuthors() {
   if (isSanityConfigured) {
     try {
       const authors = await sanityFetch<TAuthor[]>({ query: authorsQuery, tags: ['authors'] })
-      if (authors?.length) return authors
-    } catch { /* fall through to static */ }
+      return authors || []
+    } catch {
+      return []
+    }
   }
   return _getStaticAuthors()
 }
 
-export async function getAuthorByHandle(handle: string) {
+export async function getAuthorByHandle(handle: string): Promise<TAuthor | null> {
   if (isSanityConfigured) {
     try {
       const author = await sanityFetch<TAuthor | null>({
@@ -63,8 +65,10 @@ export async function getAuthorByHandle(handle: string) {
         params: { handle },
         tags: ['authors'],
       })
-      if (author) return author
-    } catch { /* fall through to static */ }
+      return author || null
+    } catch {
+      return null
+    }
   }
 
   const authors = await getAuthors()
@@ -72,7 +76,7 @@ export async function getAuthorByHandle(handle: string) {
   if (!author?.id) {
     author = authors[0]
   }
-  return author
+  return author || null
 }
 
 export type TAuthor = ReturnType<typeof _getStaticAuthors>[number]

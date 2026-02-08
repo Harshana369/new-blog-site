@@ -174,8 +174,10 @@ export async function getPostsDefault() {
         params: { postType: 'standard' },
         tags: ['posts'],
       })
-      if (posts?.length) return posts
-    } catch { /* fall through */ }
+      return posts || []
+    } catch {
+      return []
+    }
   }
   return _getStaticPostsDefault()
 }
@@ -188,8 +190,10 @@ export async function getPostsAudio() {
         params: { postType: 'audio' },
         tags: ['posts'],
       })
-      if (posts?.length) return posts
-    } catch { /* fall through */ }
+      return posts || []
+    } catch {
+      return []
+    }
   }
   return _getStaticPostsAudio()
 }
@@ -202,8 +206,10 @@ export async function getPostsVideo() {
         params: { postType: 'video' },
         tags: ['posts'],
       })
-      if (posts?.length) return posts
-    } catch { /* fall through */ }
+      return posts || []
+    } catch {
+      return []
+    }
   }
   return _getStaticPostsVideo()
 }
@@ -216,8 +222,10 @@ export async function getPostsGallery() {
         params: { postType: 'gallery' },
         tags: ['posts'],
       })
-      if (posts?.length) return posts
-    } catch { /* fall through */ }
+      return posts || []
+    } catch {
+      return []
+    }
   }
   return _getStaticPostsGallery()
 }
@@ -226,15 +234,17 @@ export async function getAllPosts() {
   if (isSanityConfigured) {
     try {
       const posts = await sanityFetch<TPost[]>({ query: postsQuery, tags: ['posts'] })
-      if (posts?.length) return posts
-    } catch { /* fall through */ }
+      return posts || []
+    } catch {
+      return []
+    }
   }
 
   const posts = await Promise.all([getPostsDefault(), getPostsVideo(), getPostsAudio(), getPostsGallery()])
   return posts.flat().sort(() => Math.random() - 0.5)
 }
 
-export async function getPostByHandle(handle: string) {
+export async function getPostByHandle(handle: string): Promise<TPostDetail | null> {
   if (isSanityConfigured) {
     try {
       const post = await sanityFetch<TPostDetail | null>({
@@ -242,8 +252,10 @@ export async function getPostByHandle(handle: string) {
         params: { handle },
         tags: ['posts'],
       })
-      if (post) return post
-    } catch { /* fall through */ }
+      return post || null
+    } catch {
+      return null
+    }
   }
 
   const posts = await getAllPosts()
@@ -251,6 +263,7 @@ export async function getPostByHandle(handle: string) {
   if (!post) {
     post = posts[0]
   }
+  if (!post) return null
 
   return {
     ...post,
@@ -278,6 +291,10 @@ export async function getPostByHandle(handle: string) {
 }
 
 export async function getCommentsByPostId(_postId: string) {
+  if (isSanityConfigured) {
+    return []
+  }
+
   const comments = [
     {
       id: 1,

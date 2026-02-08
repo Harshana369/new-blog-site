@@ -41,8 +41,10 @@ export async function getCategories() {
   if (isSanityConfigured) {
     try {
       const categories = await sanityFetch<TCategory[]>({ query: categoriesQuery, tags: ['categories'] })
-      if (categories?.length) return categories
-    } catch { /* fall through */ }
+      return categories || []
+    } catch {
+      return []
+    }
   }
   return _getStaticCategories()
 }
@@ -84,7 +86,10 @@ export async function getCategoryByHandle(handle: string) {
         tags: ['categories'],
       })
       if (category) return { ...category, posts }
-    } catch { /* fall through */ }
+      return null
+    } catch {
+      return null
+    }
   }
 
   const categories = await getCategories()
@@ -92,7 +97,7 @@ export async function getCategoryByHandle(handle: string) {
   if (!category) {
     category = categories[0]
   }
-  return { ...category, posts }
+  return category ? { ...category, posts } : null
 }
 
 export async function getCategoriesWithPosts() {
@@ -126,8 +131,10 @@ export async function getTags() {
   if (isSanityConfigured) {
     try {
       const tags = await sanityFetch<TTag[]>({ query: tagsQuery, tags: ['tags'] })
-      if (tags?.length) return tags
-    } catch { /* fall through */ }
+      return tags || []
+    } catch {
+      return []
+    }
   }
   return _getStaticTags()
 }
@@ -157,7 +164,10 @@ export async function getTagByHandle(handle: string) {
         tags: ['tags'],
       })
       if (tag) return { ...tag, posts }
-    } catch { /* fall through */ }
+      return null
+    } catch {
+      return null
+    }
   }
 
   const tags = await getTags()
@@ -165,7 +175,7 @@ export async function getTagByHandle(handle: string) {
   if (!tag) {
     tag = tags[0]
   }
-  return { ...tag, posts }
+  return tag ? { ...tag, posts } : null
 }
 
 // Types
