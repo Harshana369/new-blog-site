@@ -3,9 +3,16 @@ import clsx from 'clsx'
 import Image, { StaticImageData } from 'next/image'
 import { FC, ReactNode } from 'react'
 
+interface HeroImage {
+  src: string
+  alt?: string
+  width?: number
+  height?: number
+}
+
 interface Props {
   className?: string
-  rightImg: string | StaticImageData
+  rightImg: string | StaticImageData | HeroImage
   heading: ReactNode
   subHeading: string
   btnText: string
@@ -13,6 +20,11 @@ interface Props {
 }
 
 const SectionHero: FC<Props> = ({ className, rightImg, heading, subHeading, btnText, btnHref }) => {
+  const imgUrl = typeof rightImg === 'object' ? rightImg.src : rightImg
+  const imgAlt = typeof rightImg === 'object' ? rightImg.alt || (typeof heading === 'string' ? heading : 'Hero section illustration') : (typeof heading === 'string' ? heading : 'Hero section illustration')
+  const imgWidth = typeof rightImg === 'object' ? rightImg.width : undefined
+  const imgHeight = typeof rightImg === 'object' ? rightImg.height : undefined
+
   return (
     <div className={clsx('section-hero relative', className)}>
       <div className="relative flex flex-col items-center gap-y-14 text-center lg:flex-row lg:gap-x-10 lg:gap-y-0 lg:text-left rtl:lg:text-right">
@@ -22,7 +34,11 @@ const SectionHero: FC<Props> = ({ className, rightImg, heading, subHeading, btnT
           {!!btnText && <ButtonPrimary href={btnHref || '/'}>{btnText}</ButtonPrimary>}
         </div>
         <div className="grow">
-          <Image className="w-full" src={rightImg} alt={typeof heading === 'string' ? heading : 'Hero section illustration'} />
+          {imgWidth && imgHeight ? (
+            <Image className="w-full" src={imgUrl} alt={imgAlt} width={imgWidth} height={imgHeight} />
+          ) : (
+            <img className="w-full" src={imgUrl} alt={imgAlt} />
+          )}
         </div>
       </div>
     </div>

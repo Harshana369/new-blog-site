@@ -253,14 +253,19 @@ export const searchPostsQuery = groq`
 }`
 
 // ─── SITE SETTINGS ──────────────────────────────────────
-export const siteSettingsQuery = groq`
-*[_type == "siteSettings"][0] {
+export const siteSettingsQuery = `*[_type == "siteSettings"][0] {
   title,
   description,
   "logo": logo${imageProjection},
   "ogImage": ogImage.asset->url,
   siteUrl,
-  socialLinks
+  socialLinks,
+  heroHeading,
+  heroSubHeading,
+  heroButtonText,
+  heroButtonUrl,
+  "heroImage": heroImage${imageProjection},
+  "heroUnderlineImage": heroUnderlineImage${imageProjection}
 }`
 
 // ─── REVIEW POSTS ───────────────────────────────────────

@@ -12,6 +12,7 @@ import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import { getAuthors } from '@/data/authors'
 import { getCategories } from '@/data/categories'
 import { getAllPosts, getPostsAudio, type TPost } from '@/data/posts'
+import { getSiteSettings } from '@/data/site'
 import HeadingWithSub from '@/shared/Heading'
 import Vector1 from '@/images/Vector1.png'
 import rightImg from '@/images/hero-right.png'
@@ -29,23 +30,60 @@ const Page = async () => {
   const audioPosts = await getPostsAudio()
   const authors = await getAuthors()
   const categories = await getCategories()
+  const siteSettings = await getSiteSettings()
+
+  // Process hero heading - handle both \n and <br /> tags from Sanity
+  let heroHeadingContent = siteSettings.heroHeading || 'Welcome to Our Blog'
+
+  // Replace <br /> with actual line breaks for parsing
+  heroHeadingContent = heroHeadingContent.replace(/<br\s*\/>/gi, '\n')
+
+  // Split by newlines to create the heading parts
+  const heroHeadingParts = heroHeadingContent.split('\n').filter(p => p.trim() !== '')
+
+  // Helper to render heading with underline decoration on the last part
+  const renderHeroHeading = () => {
+    if (heroHeadingParts.length === 0) return null
+
+    const hasUnderlineImage = siteSettings.heroUnderlineImage?.src
+    const lastPart = heroHeadingParts[heroHeadingParts.length - 1]
+
+    return (
+      <span>
+        {heroHeadingParts.map((part, index) => {
+          const isLast = index === heroHeadingParts.length - 1
+          return (
+            <span key={index}>
+              {part}
+              {!isLast && <br />}
+            </span>
+          )
+        })}
+        {hasUnderlineImage && (
+          <span className="relative pr-3">
+            <Image
+              className="absolute -start-1 top-1/2 w-full -translate-y-1/2"
+              src={siteSettings.heroUnderlineImage.src}
+              alt="underline decoration"
+              width={siteSettings.heroUnderlineImage.width || 200}
+              height={siteSettings.heroUnderlineImage.height || 10}
+            />
+            <span className="relative text-primary-600">{lastPart}</span>
+          </span>
+        )}
+      </span>
+    )
+  }
 
   return (
     <div className="relative container space-y-28 pb-28 lg:space-y-32 lg:pb-32">
       <SectionHero
-        rightImg={rightImg}
+        rightImg={siteSettings.heroImage?.src || rightImg}
         className="pt-14 lg:pt-20"
-        heading={
-          <span>
-            Far from face <br /> but not from {` `}
-            <span className="relative pr-3">
-              <Image className="absolute -start-1 top-1/2 w-full -translate-y-1/2" src={Vector1} alt="hero-right" />
-              <span className="relative">heart</span>
-            </span>
-          </span>
-        }
-        btnText="Getting started"
-        subHeading="Let stay at home and share with everyone the most beautiful stories in your hometown 🎈"
+        heading={renderHeroHeading()}
+        btnText={siteSettings.heroButtonText || 'Getting started'}
+        btnHref={siteSettings.heroButtonUrl || '/submit-post'}
+        subHeading={siteSettings.heroSubHeading || "Let stay at home and share with everyone the most beautiful stories in your hometown 🎈"}
       />
 
       <SectionSliderNewCategories
