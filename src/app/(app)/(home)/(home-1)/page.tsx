@@ -2,7 +2,7 @@ import BackgroundSection from '@/components/BackgroundSection'
 import Card15Podcast from '@/components/PostCards/Card15Podcast'
 import Card16Podcast from '@/components/PostCards/Card16Podcast'
 import SectionAds from '@/components/SectionAds'
-import SectionHero3 from '@/components/SectionHero3'
+import SectionHero from '@/components/SectionHero'
 import SectionMagazine4 from '@/components/SectionMagazine4'
 import SectionPostsWithWidgets from '@/components/SectionPostsWithWidgets'
 import SectionSliderNewAuthors from '@/components/SectionSliderNewAuthors'
@@ -13,8 +13,11 @@ import { getAuthors } from '@/data/authors'
 import { getCategories } from '@/data/categories'
 import { getAllPosts, getPostsAudio, type TPost } from '@/data/posts'
 import HeadingWithSub from '@/shared/Heading'
+import Vector1 from '@/images/Vector1.png'
+import rightImg from '@/images/hero-right.png'
 import SectionVideos from '@/components/SectionVideosLazy'
 import { Metadata } from 'next'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: 'Home',
@@ -29,7 +32,21 @@ const Page = async () => {
 
   return (
     <div className="relative container space-y-28 pb-28 lg:space-y-32 lg:pb-32">
-      <SectionHero3 posts={posts.slice(0, 5)} />
+      <SectionHero
+        rightImg={rightImg}
+        className="pt-14 lg:pt-20"
+        heading={
+          <span>
+            Far from face <br /> but not from {` `}
+            <span className="relative pr-3">
+              <Image className="absolute -start-1 top-1/2 w-full -translate-y-1/2" src={Vector1} alt="hero-right" />
+              <span className="relative">heart</span>
+            </span>
+          </span>
+        }
+        btnText="Getting started"
+        subHeading="Let stay at home and share with everyone the most beautiful stories in your hometown 🎈"
+      />
 
       <SectionSliderNewCategories
         heading="Top trending topics"
