@@ -20,8 +20,10 @@ interface Props {
 }
 
 const SectionHero: FC<Props> = ({ className, rightImg, heading, subHeading, btnText, btnHref }) => {
+  const isHeroImage = (img: unknown): img is HeroImage => typeof img === 'object' && img !== null && 'src' in img && typeof (img as HeroImage).src === 'string' && !('blurDataURL' in img)
+  const defaultAlt = typeof heading === 'string' ? heading : 'Hero section illustration'
   const imgUrl = typeof rightImg === 'object' ? rightImg.src : rightImg
-  const imgAlt = typeof rightImg === 'object' ? rightImg.alt || (typeof heading === 'string' ? heading : 'Hero section illustration') : (typeof heading === 'string' ? heading : 'Hero section illustration')
+  const imgAlt = isHeroImage(rightImg) ? rightImg.alt || defaultAlt : defaultAlt
   const imgWidth = typeof rightImg === 'object' ? rightImg.width : undefined
   const imgHeight = typeof rightImg === 'object' ? rightImg.height : undefined
 
