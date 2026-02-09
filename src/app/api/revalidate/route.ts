@@ -1,6 +1,6 @@
 import { revalidateTag } from 'next/cache'
 import { type NextRequest, NextResponse } from 'next/server'
-import { createHmac } from 'crypto'
+import { parseBody } from 'next-sanity/webhook'
 
 const secret = process.env.SANITY_REVALIDATION_SECRET
 
@@ -18,29 +18,19 @@ const tagMap: Record<string, string[]> = {
   siteSettings: ['posts', 'authors', 'categories', 'tags'],
 }
 
-function isValidSignature(body: string, signature: string): boolean {
-  if (!secret) return false
-  const hmac = createHmac('sha256', secret)
-  hmac.update(body)
-  const digest = hmac.digest('hex')
-  return digest === signature
-}
-
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.text()
-    const signature = req.headers.get('x-sanity-signature') || ''
+    const { body, isValidSignature } = await parseBody<SanityWebhookBody>(req, secret)
 
-    if (secret && secret !== 'your_revalidation_secret') {
-      if (!isValidSignature(body, signature)) {
-        return NextResponse.json({ message: 'Invalid signature' }, { status: 401 })
-      }
+    if (isValidSignature === false) {
+      return NextResponse.json({ message: 'Invalid signature' }, { status: 401 })
     }
 
-    const parsed: SanityWebhookBody = JSON.parse(body)
-    const { _type } = parsed
+    if (!body?._type) {
+      return NextResponse.json({ message: 'Missing _type in body' }, { status: 400 })
+    }
 
-    const tagsToRevalidate = tagMap[_type] || ['posts']
+    const tagsToRevalidate = tagMap[body._type] || ['posts']
 
     for (const tag of tagsToRevalidate) {
       revalidateTag(tag)
