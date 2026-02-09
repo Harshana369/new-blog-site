@@ -17,11 +17,6 @@ interface Props extends Pick<HeadingWithSubProps, 'subHeading' | 'dimHeading'> {
 const SectionLargeSlider: FC<Props> = ({ posts, heading, className, subHeading, dimHeading }) => {
   const [indexActive, setIndexActive] = useState(0)
 
-  // Don't render if no posts
-  if (!posts || posts.length === 0) {
-    return null
-  }
-
   const handleClickNext = () => {
     setIndexActive((state) => {
       if (state >= posts.length - 1) {
@@ -40,17 +35,15 @@ const SectionLargeSlider: FC<Props> = ({ posts, heading, className, subHeading, 
     })
   }
 
-  // Move useSwipeable before the early return - but we need to handle empty posts case
-  // Instead, we'll conditionally apply the handlers only when we have posts
-  const hasPosts = posts && posts.length > 0
-
+  // Always call hooks - they must be called in the same order every render
   const handlers = useSwipeable({
     onSwipedLeft: handleClickNext,
     onSwipedRight: handleClickPrev,
     trackMouse: true,
   })
 
-  if (!hasPosts) {
+  // Don't render if no posts
+  if (!posts || posts.length === 0) {
     return null
   }
 
