@@ -15,7 +15,7 @@ const tagMap: Record<string, string[]> = {
   category: ['categories'],
   tag: ['tags'],
   product: ['posts'],
-  siteSettings: ['posts', 'authors', 'categories', 'tags'],
+  siteSettings: ['siteSettings', 'posts', 'authors', 'categories', 'tags'],
 }
 
 export async function POST(req: NextRequest) {
