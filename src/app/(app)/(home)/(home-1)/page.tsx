@@ -39,7 +39,7 @@ const Page = async () => {
   heroHeadingContent = heroHeadingContent.replace(/<br\s*\/>/gi, '\n')
 
   // Split by newlines to create the heading parts
-  const heroHeadingParts = heroHeadingContent.split('\n').filter(p => p.trim() !== '')
+  const heroHeadingParts = heroHeadingContent.split('\n').filter((p: string) => p.trim() !== '')
 
   // Helper to render heading with underline decoration on the last part
   const renderHeroHeading = () => {
