@@ -50,7 +50,7 @@ const Page = async () => {
 
     return (
       <span>
-        {heroHeadingParts.map((part, index) => {
+        {heroHeadingParts.map((part: string, index: number) => {
           const isLast = index === heroHeadingParts.length - 1
           return (
             <span key={index}>
