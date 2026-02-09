@@ -40,11 +40,19 @@ const SectionLargeSlider: FC<Props> = ({ posts, heading, className, subHeading, 
     })
   }
 
+  // Move useSwipeable before the early return - but we need to handle empty posts case
+  // Instead, we'll conditionally apply the handlers only when we have posts
+  const hasPosts = posts && posts.length > 0
+
   const handlers = useSwipeable({
     onSwipedLeft: handleClickNext,
     onSwipedRight: handleClickPrev,
     trackMouse: true,
   })
+
+  if (!hasPosts) {
+    return null
+  }
 
   return (
     <div className={clsx('section-large-slider relative', className)} {...handlers}>
