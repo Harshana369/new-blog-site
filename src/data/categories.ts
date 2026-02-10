@@ -1,6 +1,6 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, latestArticlesQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
-import { getAllPosts, getPostsDefault, TPost } from './posts'
+import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, latestArticlesQuery, latestAudioArticlesQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
+import { getAllPosts, getPostsDefault, getPostsAudio, TPost } from './posts'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
 
@@ -98,6 +98,39 @@ export async function getLatestArticlesSection(): Promise<TLatestArticles> {
       }
     } catch (error) {
       console.error('[getLatestArticlesSection] Failed to fetch:', error)
+    }
+  }
+
+  return fallback
+}
+
+export type TLatestAudioArticles = {
+  heading: string
+  subHeading: string
+  posts?: TPost[]
+}
+
+export async function getLatestAudioArticlesSection(): Promise<TLatestAudioArticles> {
+  const fallback: TLatestAudioArticles = {
+    heading: 'Latest audio articles',
+    subHeading: 'Over 1000+ audio articles',
+  }
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TLatestAudioArticles | null>({
+        query: latestAudioArticlesQuery,
+        tags: ['latestAudioArticles'],
+      })
+      if (result?.heading) {
+        if (!result.posts?.length) {
+          const audioPosts = await getPostsAudio()
+          result.posts = audioPosts.slice(0, 9)
+        }
+        return result
+      }
+    } catch (error) {
+      console.error('[getLatestAudioArticlesSection] Failed to fetch:', error)
     }
   }
 

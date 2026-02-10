@@ -10,7 +10,7 @@ import SectionSliderNewCategories from '@/components/SectionSliderNewCategories'
 import SectionSliderPosts from '@/components/SectionSliderPosts'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import { getAuthors } from '@/data/authors'
-import { getCategories, getTrendingTopics, getLatestArticlesSection } from '@/data/categories'
+import { getCategories, getTrendingTopics, getLatestArticlesSection, getLatestAudioArticlesSection } from '@/data/categories'
 import { getAllPosts, getPostsAudio, type TPost } from '@/data/posts'
 import { getSiteSettings } from '@/data/site'
 import HeadingWithSub from '@/shared/Heading'
@@ -32,6 +32,7 @@ const Page = async () => {
   const categories = await getCategories()
   const trendingTopics = await getTrendingTopics()
   const latestArticles = await getLatestArticlesSection()
+  const latestAudioArticles = await getLatestAudioArticlesSection()
   const siteSettings = await getSiteSettings()
 
   // Process hero heading - handle both \n and <br /> tags from Sanity
@@ -106,14 +107,14 @@ const Page = async () => {
       </div>
 
       <div>
-        <HeadingWithSub subHeading="Over 1000+ audio articles">Latest audio articles</HeadingWithSub>
+        <HeadingWithSub subHeading={latestAudioArticles.subHeading}>{latestAudioArticles.heading}</HeadingWithSub>
         <div className="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-          {audioPosts.slice(0, 3).map((p: TPost) => (
+          {(latestAudioArticles.posts || audioPosts).slice(0, 3).map((p: TPost) => (
             <Card16Podcast key={p.id} post={p} />
           ))}
           <div className="md:col-span-2 lg:col-span-3">
             <div className="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-              {audioPosts.slice(3, 9).map((p: TPost) => (
+              {(latestAudioArticles.posts || audioPosts).slice(3, 9).map((p: TPost) => (
                 <Card15Podcast key={p.id} post={p} />
               ))}
             </div>
