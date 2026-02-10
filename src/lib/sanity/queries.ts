@@ -340,6 +340,7 @@ export const lifestylesQuery = groq`
 *[_type == "lifestyles"][0] {
   heading,
   subHeading,
+  "categories": categories[]->{ "id": _id, name },
   "posts": posts[]->{
     "id": _id,
     "featuredImage": featuredImage${imageProjection},

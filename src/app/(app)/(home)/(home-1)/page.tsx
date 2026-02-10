@@ -136,6 +136,7 @@ const Page = async () => {
         heading={lifestyles.heading}
         subHeading={lifestyles.subHeading}
         posts={lifestyles.posts || posts.slice(0, 8)}
+        tabs={lifestyles.categories?.length ? lifestyles.categories.map(c => c.name) : undefined}
       />
 
       <div className="relative py-16 lg:py-20">

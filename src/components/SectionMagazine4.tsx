@@ -8,21 +8,24 @@ import Card8 from './PostCards/Card8'
 import Card9 from './PostCards/Card9'
 import SectionTabHeader from './SectionTabHeader'
 
+const DEFAULT_TABS = ['Development', 'Design', 'Illustration', 'Photography']
+
 type Props = Pick<HeadingWithSubProps, 'subHeading' | 'dimHeading'> & {
   posts: TPost[]
   className?: string
   heading?: string
+  tabs?: string[]
 }
 
-const SectionMagazine4: FC<Props> = ({ posts, heading, className, subHeading, dimHeading }) => {
+const SectionMagazine4: FC<Props> = ({ posts, heading, className, subHeading, dimHeading, tabs = DEFAULT_TABS }) => {
   return (
     <div className={clsx('section-magazine-4 relative', className)}>
       <SectionTabHeader
         heading={heading}
         subHeading={subHeading}
         dimHeading={dimHeading}
-        tabActive="Development"
-        tabs={['Development', 'Design', 'Illustration', 'Photography']}
+        tabActive={tabs[0] || DEFAULT_TABS[0]}
+        tabs={tabs}
       />
 
       {!posts?.length && <span>Nothing we found!</span>}

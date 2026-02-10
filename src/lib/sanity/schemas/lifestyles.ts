@@ -18,6 +18,13 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'categories',
+      title: 'Tab Categories',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
+      description: 'Drag and drop to reorder. These appear as filter tabs above the posts.',
+    }),
+    defineField({
       name: 'posts',
       title: 'Posts',
       type: 'array',

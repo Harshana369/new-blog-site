@@ -140,6 +140,7 @@ export async function getLatestAudioArticlesSection(): Promise<TLatestAudioArtic
 export type TLifestyles = {
   heading: string
   subHeading?: string
+  categories?: { id: string; name: string }[]
   posts?: TPost[]
 }
 
