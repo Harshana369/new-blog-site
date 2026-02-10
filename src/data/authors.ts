@@ -1,5 +1,5 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { authorsQuery, authorByHandleQuery } from '@/lib/sanity/queries'
+import { authorsQuery, authorByHandleQuery, topAuthorsQuery } from '@/lib/sanity/queries'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
 
@@ -82,3 +82,36 @@ export async function getAuthorByHandle(handle: string): Promise<TAuthor | null>
 }
 
 export type TAuthor = ReturnType<typeof _getStaticAuthors>[number]
+
+export type TTopAuthors = {
+  heading: string
+  subHeading: string
+  authors?: TAuthor[]
+}
+
+export async function getTopAuthorsSection(): Promise<TTopAuthors> {
+  const fallback: TTopAuthors = {
+    heading: 'Top authors of month',
+    subHeading: 'Say hello to future creator potentials',
+  }
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TTopAuthors | null>({
+        query: topAuthorsQuery,
+        tags: ['topAuthors'],
+      })
+      if (result?.heading) {
+        if (!result.authors?.length) {
+          const allAuthors = await getAuthors()
+          result.authors = allAuthors.slice(0, 10)
+        }
+        return result
+      }
+    } catch (error) {
+      console.error('[getTopAuthorsSection] Failed to fetch:', error)
+    }
+  }
+
+  return fallback
+}

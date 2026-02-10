@@ -377,6 +377,26 @@ export const newsletterQuery = groq`
   "image": image${imageProjection}
 }`
 
+// ─── TOP AUTHORS ────────────────────────────────────────
+export const topAuthorsQuery = groq`
+*[_type == "topAuthors"][0] {
+  heading,
+  subHeading,
+  "authors": authors[]->{
+    "id": _id,
+    name,
+    "handle": slug.current,
+    career,
+    description,
+    "count": count(*[_type == "post" && references(^._id) && status == "published"]),
+    "joinedDate": _createdAt,
+    "reviewCount": 0,
+    "rating": 4.5,
+    "avatar": avatar${imageProjection},
+    "cover": cover${imageProjection}
+  }
+}`
+
 // ─── VIDEOS SECTION ─────────────────────────────────────
 export const videosSectionQuery = groq`
 *[_type == "videosSection"][0] {

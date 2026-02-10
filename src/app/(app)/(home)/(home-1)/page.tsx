@@ -9,7 +9,7 @@ import SectionSliderNewAuthors from '@/components/SectionSliderNewAuthors'
 import SectionSliderNewCategories from '@/components/SectionSliderNewCategories'
 import SectionSliderPosts from '@/components/SectionSliderPosts'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
-import { getAuthors } from '@/data/authors'
+import { getAuthors, getTopAuthorsSection } from '@/data/authors'
 import { getCategories, getTrendingTopics, getLatestArticlesSection, getLatestAudioArticlesSection, getLifestylesSection, getSeaTravelSection } from '@/data/categories'
 import { getAllPosts, getPostsAudio, type TPost } from '@/data/posts'
 import { getSiteSettings, getAdvertisement, getNewsletter, getVideosSection } from '@/data/site'
@@ -29,6 +29,7 @@ const Page = async () => {
   const posts = await getAllPosts()
   const audioPosts = await getPostsAudio()
   const authors = await getAuthors()
+  const topAuthors = await getTopAuthorsSection()
   const categories = await getCategories()
   const trendingTopics = await getTrendingTopics()
   const latestArticles = await getLatestArticlesSection()
@@ -146,9 +147,9 @@ const Page = async () => {
       <div className="relative py-16 lg:py-20">
         <BackgroundSection />
         <SectionSliderNewAuthors
-          heading="Top authors of month"
-          subHeading="Say hello to future creator potentials"
-          authors={authors.slice(0, 10)}
+          heading={topAuthors.heading}
+          subHeading={topAuthors.subHeading}
+          authors={topAuthors.authors || authors.slice(0, 10)}
         />
       </div>
 
