@@ -1,5 +1,5 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
+import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, latestArticlesQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
 import { getAllPosts, getPostsDefault, TPost } from './posts'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
@@ -68,6 +68,40 @@ export async function getTrendingTopics(): Promise<TTrendingTopics> {
     ...fallback,
     categories: categories.slice(0, 10),
   }
+}
+
+export type TLatestArticles = {
+  heading: string
+  subHeading: string
+  posts?: TPost[]
+}
+
+export async function getLatestArticlesSection(): Promise<TLatestArticles> {
+  const fallback: TLatestArticles = {
+    heading: 'Explore our latest articles',
+    subHeading: 'Over 2000+ articles',
+  }
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TLatestArticles | null>({
+        query: latestArticlesQuery,
+        tags: ['latestArticles'],
+      })
+      if (result?.heading) {
+        // If no posts selected in Studio, fall back to recent posts
+        if (!result.posts?.length) {
+          const allPosts = await getAllPosts()
+          result.posts = allPosts.slice(0, 8)
+        }
+        return result
+      }
+    } catch (error) {
+      console.error('[getLatestArticlesSection] Failed to fetch:', error)
+    }
+  }
+
+  return fallback
 }
 
 export async function getCategories() {

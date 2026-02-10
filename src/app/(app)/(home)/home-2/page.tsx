@@ -10,7 +10,7 @@ import SectionSliderNewCategories from '@/components/SectionSliderNewCategories'
 import SectionSliderPosts from '@/components/SectionSliderPosts'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import { getAuthors } from '@/data/authors'
-import { getCategories, getTrendingTopics } from '@/data/categories'
+import { getCategories, getTrendingTopics, getLatestArticlesSection } from '@/data/categories'
 import { getAllPosts, getPostsAudio, type TPost } from '@/data/posts'
 import HeadingWithSub from '@/shared/Heading'
 import SectionVideos from '@/components/SectionVideosLazy'
@@ -27,6 +27,7 @@ const Page = async () => {
   const authors = await getAuthors()
   const categories = await getCategories()
   const trendingTopics = await getTrendingTopics()
+  const latestArticles = await getLatestArticlesSection()
 
   return (
     <div className="relative container space-y-28 pb-28 lg:space-y-32 lg:pb-32">
@@ -43,8 +44,8 @@ const Page = async () => {
         <BackgroundSection />
         <SectionSliderPosts
           postCardName="card7"
-          heading="Explore our latest articles"
-          subHeading="Over 2000+ articles"
+          heading={latestArticles.heading}
+          subHeading={latestArticles.subHeading}
           posts={posts.slice(0, 8)}
         />
       </div>

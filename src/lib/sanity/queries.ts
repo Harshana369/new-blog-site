@@ -186,6 +186,35 @@ export const trendingTopicsQuery = groq`
   }
 }`
 
+// ─── LATEST ARTICLES ───────────────────────────────────
+export const latestArticlesQuery = groq`
+*[_type == "latestArticles"][0] {
+  heading,
+  subHeading,
+  "posts": posts[]->{
+    "id": _id,
+    "featuredImage": featuredImage${imageProjection},
+    title,
+    "handle": slug.current,
+    excerpt,
+    "date": publishedAt,
+    readingTime,
+    "commentCount": 0,
+    "viewCount": 0,
+    "bookmarkCount": 0,
+    "bookmarked": false,
+    "likeCount": 0,
+    "liked": false,
+    postType,
+    status,
+    "author": author->${authorMiniProjection},
+    "categories": categories[]->${categoryMiniProjection},
+    "audioUrl": audioUrl,
+    "videoUrl": videoUrl,
+    "galleryImgs": galleryImages[].asset->url
+  }
+}`
+
 // ─── CATEGORIES ──────────────────────────────────────────
 export const categoriesQuery = groq`
 *[_type == "category"] | order(name asc) {

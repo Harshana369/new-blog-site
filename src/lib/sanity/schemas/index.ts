@@ -6,5 +6,6 @@ import review from './review'
 import siteSettings from './siteSettings'
 import tag from './tag'
 import trendingTopics from './trendingTopics'
+import latestArticles from './latestArticles'
 
-export const schemaTypes = [post, author, category, tag, product, review, siteSettings, trendingTopics]
+export const schemaTypes = [post, author, category, tag, product, review, siteSettings, trendingTopics, latestArticles]
