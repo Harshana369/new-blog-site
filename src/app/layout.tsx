@@ -49,7 +49,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={beVietnamPro.className}>
-      <body className="bg-white text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-200">
+      <body suppressHydrationWarning className="bg-white text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-200">
         <SkipToContent />
         <ThemeProvider>
           <div>{children}</div>
