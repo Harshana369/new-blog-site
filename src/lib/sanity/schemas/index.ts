@@ -14,5 +14,6 @@ import newsletter from './newsletter'
 import seaTravel from './seaTravel'
 import videosSection from './videosSection'
 import topAuthors from './topAuthors'
+import latestArticlesWithWidgets from './latestArticlesWithWidgets'
 
-export const schemaTypes = [post, author, category, tag, product, review, siteSettings, trendingTopics, latestArticles, latestAudioArticles, advertisement, lifestyles, newsletter, seaTravel, videosSection, topAuthors]
+export const schemaTypes = [post, author, category, tag, product, review, siteSettings, trendingTopics, latestArticles, latestAudioArticles, advertisement, lifestyles, newsletter, seaTravel, videosSection, topAuthors, latestArticlesWithWidgets]

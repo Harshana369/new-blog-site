@@ -377,6 +377,80 @@ export const newsletterQuery = groq`
   "image": image${imageProjection}
 }`
 
+// ─── LATEST ARTICLES WITH WIDGETS ───────────────────────
+export const latestArticlesWithWidgetsQuery = groq`
+*[_type == "latestArticlesWithWidgets"][0] {
+  heading,
+  subHeading,
+  "posts": posts[]->{
+    "id": _id,
+    "featuredImage": featuredImage${imageProjection},
+    title,
+    "handle": slug.current,
+    excerpt,
+    "date": publishedAt,
+    readingTime,
+    "commentCount": 0,
+    "viewCount": 0,
+    "bookmarkCount": 0,
+    "bookmarked": false,
+    "likeCount": 0,
+    "liked": false,
+    postType,
+    status,
+    "author": author->${authorMiniProjection},
+    "categories": categories[]->${categoryMiniProjection},
+    "audioUrl": audioUrl,
+    "videoUrl": videoUrl,
+    "galleryImgs": galleryImages[].asset->url
+  },
+  "widgetAuthors": widgetAuthors[]->{
+    "id": _id,
+    name,
+    "handle": slug.current,
+    career,
+    description,
+    "count": count(*[_type == "post" && references(^._id) && status == "published"]),
+    "joinedDate": _createdAt,
+    "reviewCount": 0,
+    "rating": 4.5,
+    "avatar": avatar${imageProjection},
+    "cover": cover${imageProjection}
+  },
+  "widgetCategories": widgetCategories[]->{
+    "id": _id,
+    name,
+    "handle": slug.current,
+    description,
+    color,
+    "count": count(*[_type == "post" && references(^._id) && status == "published"]),
+    "date": _createdAt,
+    "thumbnail": thumbnail${imageProjection}
+  },
+  "widgetPosts": widgetPosts[]->{
+    "id": _id,
+    "featuredImage": featuredImage${imageProjection},
+    title,
+    "handle": slug.current,
+    excerpt,
+    "date": publishedAt,
+    readingTime,
+    "commentCount": 0,
+    "viewCount": 0,
+    "bookmarkCount": 0,
+    "bookmarked": false,
+    "likeCount": 0,
+    "liked": false,
+    postType,
+    status,
+    "author": author->${authorMiniProjection},
+    "categories": categories[]->${categoryMiniProjection},
+    "audioUrl": audioUrl,
+    "videoUrl": videoUrl,
+    "galleryImgs": galleryImages[].asset->url
+  }
+}`
+
 // ─── TOP AUTHORS ────────────────────────────────────────
 export const topAuthorsQuery = groq`
 *[_type == "topAuthors"][0] {

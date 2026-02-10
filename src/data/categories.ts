@@ -1,6 +1,7 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, latestArticlesQuery, latestAudioArticlesQuery, lifestylesQuery, seaTravelQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
+import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, latestArticlesQuery, latestAudioArticlesQuery, lifestylesQuery, seaTravelQuery, latestArticlesWithWidgetsQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
 import { getAllPosts, getPostsDefault, getPostsAudio, TPost } from './posts'
+import { getAuthors, TAuthor } from './authors'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
 
@@ -205,6 +206,54 @@ export async function getSeaTravelSection(): Promise<TSeaTravel> {
       }
     } catch (error) {
       console.error('[getSeaTravelSection] Failed to fetch:', error)
+    }
+  }
+
+  return fallback
+}
+
+export type TLatestArticlesWithWidgets = {
+  heading: string
+  subHeading: string
+  posts?: TPost[]
+  widgetAuthors?: TAuthor[]
+  widgetCategories?: TCategory[]
+  widgetPosts?: TPost[]
+}
+
+export async function getLatestArticlesWithWidgetsSection(): Promise<TLatestArticlesWithWidgets> {
+  const fallback: TLatestArticlesWithWidgets = {
+    heading: 'Latest articles',
+    subHeading: 'Over 2000+ articles',
+  }
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TLatestArticlesWithWidgets | null>({
+        query: latestArticlesWithWidgetsQuery,
+        tags: ['latestArticlesWithWidgets'],
+      })
+      if (result?.heading) {
+        if (!result.posts?.length) {
+          const allPosts = await getAllPosts()
+          result.posts = allPosts.slice(0, 8)
+        }
+        if (!result.widgetAuthors?.length) {
+          const allAuthors = await getAuthors()
+          result.widgetAuthors = allAuthors.slice(0, 3)
+        }
+        if (!result.widgetCategories?.length) {
+          const allCategories = await getCategories()
+          result.widgetCategories = allCategories.slice(0, 4)
+        }
+        if (!result.widgetPosts?.length) {
+          const allPosts = await getAllPosts()
+          result.widgetPosts = allPosts.slice(0, 4)
+        }
+        return result
+      }
+    } catch (error) {
+      console.error('[getLatestArticlesWithWidgetsSection] Failed to fetch:', error)
     }
   }
 

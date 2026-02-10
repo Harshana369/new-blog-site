@@ -10,7 +10,7 @@ import SectionSliderNewCategories from '@/components/SectionSliderNewCategories'
 import SectionSliderPosts from '@/components/SectionSliderPosts'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import { getAuthors, getTopAuthorsSection } from '@/data/authors'
-import { getCategories, getTrendingTopics, getLatestArticlesSection, getLatestAudioArticlesSection, getLifestylesSection, getSeaTravelSection } from '@/data/categories'
+import { getCategories, getTrendingTopics, getLatestArticlesSection, getLatestAudioArticlesSection, getLifestylesSection, getSeaTravelSection, getLatestArticlesWithWidgetsSection } from '@/data/categories'
 import { getAllPosts, getPostsAudio, type TPost } from '@/data/posts'
 import { getSiteSettings, getAdvertisement, getNewsletter, getVideosSection } from '@/data/site'
 import HeadingWithSub from '@/shared/Heading'
@@ -39,6 +39,7 @@ const Page = async () => {
   const advertisement = await getAdvertisement()
   const newsletter = await getNewsletter()
   const videosSection = await getVideosSection()
+  const latestArticlesWithWidgets = await getLatestArticlesWithWidgetsSection()
   const siteSettings = await getSiteSettings()
 
   // Process hero heading - handle both \n and <br /> tags from Sanity
@@ -182,12 +183,12 @@ const Page = async () => {
       <SectionPostsWithWidgets
         postCardName="card14"
         gridClass="sm:grid-cols-2"
-        posts={posts.slice(0, 8)}
-        heading="Latest articles"
-        subHeading="Over 2000+ articles"
-        widgetCategories={categories.slice(0, 4)}
-        widgetAuthors={authors.slice(0, 3)}
-        widgetPosts={posts.slice(0, 4)}
+        posts={latestArticlesWithWidgets.posts || posts.slice(0, 8)}
+        heading={latestArticlesWithWidgets.heading}
+        subHeading={latestArticlesWithWidgets.subHeading}
+        widgetCategories={latestArticlesWithWidgets.widgetCategories || categories.slice(0, 4)}
+        widgetAuthors={latestArticlesWithWidgets.widgetAuthors || authors.slice(0, 3)}
+        widgetPosts={latestArticlesWithWidgets.widgetPosts || posts.slice(0, 4)}
       />
     </div>
   )
