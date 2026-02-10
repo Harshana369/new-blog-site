@@ -12,7 +12,7 @@ import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import { getAuthors } from '@/data/authors'
 import { getCategories, getTrendingTopics, getLatestArticlesSection, getLatestAudioArticlesSection, getLifestylesSection, getSeaTravelSection } from '@/data/categories'
 import { getAllPosts, getPostsAudio, type TPost } from '@/data/posts'
-import { getSiteSettings, getAdvertisement, getNewsletter } from '@/data/site'
+import { getSiteSettings, getAdvertisement, getNewsletter, getVideosSection } from '@/data/site'
 import HeadingWithSub from '@/shared/Heading'
 import Vector1 from '@/images/Vector1.png'
 import rightImg from '@/images/hero-right.png'
@@ -37,6 +37,7 @@ const Page = async () => {
   const seaTravel = await getSeaTravelSection()
   const advertisement = await getAdvertisement()
   const newsletter = await getNewsletter()
+  const videosSection = await getVideosSection()
   const siteSettings = await getSiteSettings()
 
   // Process hero heading - handle both \n and <br /> tags from Sanity
@@ -171,7 +172,11 @@ const Page = async () => {
         />
       </div>
 
-      <SectionVideos />
+      <SectionVideos
+        heading={videosSection.heading}
+        subHeading={videosSection.subHeading}
+        videos={videosSection.videos?.length ? videosSection.videos : undefined}
+      />
 
       <SectionPostsWithWidgets
         postCardName="card14"

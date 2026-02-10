@@ -1,5 +1,5 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { siteSettingsQuery, advertisementQuery, newsletterQuery } from '@/lib/sanity/queries'
+import { siteSettingsQuery, advertisementQuery, newsletterQuery, videosSectionQuery } from '@/lib/sanity/queries'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
 
@@ -94,6 +94,37 @@ export async function getNewsletter(): Promise<TNewsletter> {
       if (result) return { ...fallback, ...result }
     } catch (error) {
       console.error('[getNewsletter] Failed to fetch:', error)
+    }
+  }
+
+  return fallback
+}
+
+export type TVideoItem = {
+  id: string
+  title?: string
+  thumbnail: string
+  video: string
+}
+
+export type TVideosSection = {
+  heading?: string
+  subHeading?: string
+  videos?: TVideoItem[]
+}
+
+export async function getVideosSection(): Promise<TVideosSection> {
+  const fallback: TVideosSection = {}
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TVideosSection | null>({
+        query: videosSectionQuery,
+        tags: ['videosSection'],
+      })
+      if (result) return result
+    } catch (error) {
+      console.error('[getVideosSection] Failed to fetch:', error)
     }
   }
 

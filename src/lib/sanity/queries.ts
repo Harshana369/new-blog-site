@@ -377,6 +377,19 @@ export const newsletterQuery = groq`
   "image": image${imageProjection}
 }`
 
+// ─── VIDEOS SECTION ─────────────────────────────────────
+export const videosSectionQuery = groq`
+*[_type == "videosSection"][0] {
+  heading,
+  subHeading,
+  "videos": videos[] {
+    "id": _key,
+    title,
+    "video": videoUrl,
+    "thumbnail": thumbnail.asset->url
+  }
+}`
+
 // ─── SEA TRAVEL ─────────────────────────────────────────
 export const seaTravelQuery = groq`
 *[_type == "seaTravel"][0] {
