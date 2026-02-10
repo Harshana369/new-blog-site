@@ -10,7 +10,7 @@ import SectionSliderNewCategories from '@/components/SectionSliderNewCategories'
 import SectionSliderPosts from '@/components/SectionSliderPosts'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import { getAuthors } from '@/data/authors'
-import { getCategories } from '@/data/categories'
+import { getCategories, getTrendingTopics } from '@/data/categories'
 import { getAllPosts, getPostsAudio, type TPost } from '@/data/posts'
 import HeadingWithSub from '@/shared/Heading'
 import SectionVideos from '@/components/SectionVideosLazy'
@@ -26,16 +26,17 @@ const Page = async () => {
   const audioPosts = await getPostsAudio()
   const authors = await getAuthors()
   const categories = await getCategories()
+  const trendingTopics = await getTrendingTopics()
 
   return (
     <div className="relative container space-y-28 pb-28 lg:space-y-32 lg:pb-32">
       <SectionHero3 posts={posts.slice(0, 5)} />
 
       <SectionSliderNewCategories
-        heading="Top trending topics"
+        heading={trendingTopics.heading}
         categoryCardType="card5"
-        subHeading="Discover over 112 topics"
-        categories={categories.filter((_: unknown, i: number) => i < 10)}
+        subHeading={trendingTopics.subHeading}
+        categories={trendingTopics.categories}
       />
 
       <div className="relative py-16 lg:py-20">

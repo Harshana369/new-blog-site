@@ -11,7 +11,7 @@ import SectionSliderNewAuthors from '@/components/SectionSliderNewAuthors'
 import SectionSliderPosts from '@/components/SectionSliderPosts'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import { getAuthors } from '@/data/authors'
-import { getCategories } from '@/data/categories'
+import { getCategories, getTrendingTopics } from '@/data/categories'
 import { getAllPosts, getPostsAudio } from '@/data/posts'
 import Vector1 from '@/images/Vector1.png'
 import rightImg from '@/images/hero-right.png'
@@ -29,6 +29,7 @@ const Page = async () => {
   const audioPosts = await getPostsAudio()
   const authors = await getAuthors()
   const categories = await getCategories()
+  const trendingTopics = await getTrendingTopics()
 
   return (
     <div className="relative container space-y-28 pb-28 lg:space-y-32 lg:pb-32">
@@ -50,9 +51,9 @@ const Page = async () => {
 
       <SectionGridCategoryBox
         categoryCardType="card2"
-        categories={categories.slice(0, 10)}
-        heading="Top trending topics"
-        subHeading="Explore the most popular categories"
+        categories={trendingTopics.categories}
+        heading={trendingTopics.heading}
+        subHeading={trendingTopics.subHeading}
       />
 
       <div className="relative py-16 lg:py-20">

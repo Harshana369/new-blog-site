@@ -9,7 +9,7 @@ import SectionSliderNewCategories from '@/components/SectionSliderNewCategories'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import SectionTrending from '@/components/SectionTrending'
 import { getAuthors } from '@/data/authors'
-import { getCategories } from '@/data/categories'
+import { getCategories, getTrendingTopics } from '@/data/categories'
 import { getAllPosts, getPostsVideo } from '@/data/posts'
 import becomAuthorImg from '@/images/BecomeAnAuthorImg.png'
 import SectionVideos from '@/components/SectionVideosLazy'
@@ -25,6 +25,7 @@ const Page = async () => {
   const videoPosts = await getPostsVideo()
   const authors = await getAuthors()
   const categories = await getCategories()
+  const trendingTopics = await getTrendingTopics()
 
   return (
     <div className="relative">
@@ -41,9 +42,9 @@ const Page = async () => {
         <div className="relative py-16 lg:py-20">
           <BackgroundSection />
           <SectionSliderNewCategories
-            heading="Subtopics of Travel"
-            subHeading="Explore 1129+ other articles"
-            categories={categories}
+            heading={trendingTopics.heading}
+            subHeading={trendingTopics.subHeading}
+            categories={trendingTopics.categories}
           />
         </div>
 

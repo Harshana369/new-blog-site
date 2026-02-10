@@ -1,5 +1,5 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { categoriesQuery, categoryByHandleQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
+import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
 import { getAllPosts, getPostsDefault, TPost } from './posts'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
@@ -35,6 +35,39 @@ function _getStaticCategories() {
     _makeCategory('category-10', 'Education', 'education', 'Stay informed about educational trends, learning resources, and academic insights.', 'orange', 31, '2025-01-01', 9),
     _makeCategory('category-11', 'Typography', 'typography', 'Stay informed about educational trends, learning resources, and academic insights.', 'sky', 31, '2025-06-15', 1),
   ]
+}
+
+export type TTrendingTopics = {
+  heading: string
+  subHeading: string
+  categories: TCategory[]
+}
+
+export async function getTrendingTopics(): Promise<TTrendingTopics> {
+  const fallback: TTrendingTopics = {
+    heading: 'Top trending topics',
+    subHeading: 'Discover over 112 topics',
+    categories: [],
+  }
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TTrendingTopics | null>({
+        query: trendingTopicsQuery,
+        tags: ['trendingTopics'],
+      })
+      if (result?.categories?.length) return result
+    } catch (error) {
+      console.error('[getTrendingTopics] Failed to fetch:', error)
+    }
+  }
+
+  // Fallback: use first 10 categories
+  const categories = await getCategories()
+  return {
+    ...fallback,
+    categories: categories.slice(0, 10),
+  }
 }
 
 export async function getCategories() {

@@ -169,6 +169,23 @@ export const authorByHandleQuery = groq`
 export const authorSlugsQuery = groq`
 *[_type == "author"].slug.current`
 
+// ─── TRENDING TOPICS ────────────────────────────────────
+export const trendingTopicsQuery = groq`
+*[_type == "trendingTopics"][0] {
+  heading,
+  subHeading,
+  "categories": categories[]->{
+    "id": _id,
+    name,
+    "handle": slug.current,
+    description,
+    color,
+    "count": count(*[_type == "post" && references(^._id) && status == "published"]),
+    "date": _createdAt,
+    "thumbnail": thumbnail${imageProjection}
+  }
+}`
+
 // ─── CATEGORIES ──────────────────────────────────────────
 export const categoriesQuery = groq`
 *[_type == "category"] | order(name asc) {

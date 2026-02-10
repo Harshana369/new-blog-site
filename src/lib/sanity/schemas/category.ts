@@ -45,7 +45,7 @@ export default defineType({
       },
       initialValue: 'blue',
     }),
-    defineField({
+defineField({
       name: 'thumbnail',
       title: 'Thumbnail',
       type: 'image',
