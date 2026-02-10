@@ -1,9 +1,11 @@
+'use client'
+
 import { TPost } from '@/data/posts'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import { HeadingWithSubProps } from '@/shared/Heading'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import Card8 from './PostCards/Card8'
 import Card9 from './PostCards/Card9'
 import SectionTabHeader from './SectionTabHeader'
@@ -15,9 +17,14 @@ type Props = Pick<HeadingWithSubProps, 'subHeading' | 'dimHeading'> & {
   className?: string
   heading?: string
   tabs?: string[]
+  tabPosts?: Record<string, TPost[]>
 }
 
-const SectionMagazine4: FC<Props> = ({ posts, heading, className, subHeading, dimHeading, tabs = DEFAULT_TABS }) => {
+const SectionMagazine4: FC<Props> = ({ posts, heading, className, subHeading, dimHeading, tabs = DEFAULT_TABS, tabPosts }) => {
+  const [activeTab, setActiveTab] = useState(tabs[0] || DEFAULT_TABS[0])
+
+  const currentPosts = (tabPosts && tabPosts[activeTab]) || posts
+
   return (
     <div className={clsx('section-magazine-4 relative', className)}>
       <SectionTabHeader
@@ -26,18 +33,19 @@ const SectionMagazine4: FC<Props> = ({ posts, heading, className, subHeading, di
         dimHeading={dimHeading}
         tabActive={tabs[0] || DEFAULT_TABS[0]}
         tabs={tabs}
+        onChangeTab={setActiveTab}
       />
 
-      {!posts?.length && <span>Nothing we found!</span>}
+      {!currentPosts?.length && <span>Nothing we found!</span>}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-7 xl:grid-cols-4">
-        {posts[0] && <Card8 className="sm:col-span-2" post={posts[0]} />}
-        {posts.slice(1, 3).map((item, index) => (
+        {currentPosts[0] && <Card8 className="sm:col-span-2" post={currentPosts[0]} />}
+        {currentPosts.slice(1, 3).map((item, index) => (
           <Card9 key={index} post={item} />
         ))}
-        {posts.slice(3, 5).map((item, index) => (
+        {currentPosts.slice(3, 5).map((item, index) => (
           <Card9 key={index} post={item} />
         ))}
-        {posts[5] && <Card8 className="sm:col-span-2" post={posts[5]} />}
+        {currentPosts[5] && <Card8 className="sm:col-span-2" post={currentPosts[5]} />}
       </div>
 
       <div className="mt-20 flex justify-center">

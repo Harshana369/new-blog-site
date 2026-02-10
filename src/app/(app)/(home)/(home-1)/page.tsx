@@ -10,9 +10,9 @@ import SectionSliderNewCategories from '@/components/SectionSliderNewCategories'
 import SectionSliderPosts from '@/components/SectionSliderPosts'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import { getAuthors } from '@/data/authors'
-import { getCategories, getTrendingTopics, getLatestArticlesSection, getLatestAudioArticlesSection, getLifestylesSection } from '@/data/categories'
+import { getCategories, getTrendingTopics, getLatestArticlesSection, getLatestAudioArticlesSection, getLifestylesSection, getSeaTravelSection } from '@/data/categories'
 import { getAllPosts, getPostsAudio, type TPost } from '@/data/posts'
-import { getSiteSettings, getAdvertisement } from '@/data/site'
+import { getSiteSettings, getAdvertisement, getNewsletter } from '@/data/site'
 import HeadingWithSub from '@/shared/Heading'
 import Vector1 from '@/images/Vector1.png'
 import rightImg from '@/images/hero-right.png'
@@ -34,7 +34,9 @@ const Page = async () => {
   const latestArticles = await getLatestArticlesSection()
   const latestAudioArticles = await getLatestAudioArticlesSection()
   const lifestyles = await getLifestylesSection()
+  const seaTravel = await getSeaTravelSection()
   const advertisement = await getAdvertisement()
+  const newsletter = await getNewsletter()
   const siteSettings = await getSiteSettings()
 
   // Process hero heading - handle both \n and <br /> tags from Sanity
@@ -135,8 +137,9 @@ const Page = async () => {
       <SectionMagazine4
         heading={lifestyles.heading}
         subHeading={lifestyles.subHeading}
-        posts={lifestyles.posts || posts.slice(0, 8)}
-        tabs={lifestyles.categories?.length ? lifestyles.categories.map(c => c.name) : undefined}
+        posts={lifestyles.tabs?.[0]?.posts || posts.slice(0, 8)}
+        tabs={lifestyles.tabs?.length ? lifestyles.tabs.map(t => t.category.name) : undefined}
+        tabPosts={lifestyles.tabs?.length ? Object.fromEntries(lifestyles.tabs.map(t => [t.category.name, t.posts])) : undefined}
       />
 
       <div className="relative py-16 lg:py-20">
@@ -148,15 +151,23 @@ const Page = async () => {
         />
       </div>
 
-      <SectionSubscribe2 />
+      <SectionSubscribe2
+        heading={newsletter.heading}
+        description={newsletter.description}
+        benefits={newsletter.benefits}
+        placeholder={newsletter.placeholder}
+        imgSrc={newsletter.image?.src || undefined}
+        imgWidth={newsletter.image?.width}
+        imgHeight={newsletter.image?.height}
+      />
 
       <div className="relative py-16 lg:py-20">
         <BackgroundSection />
         <SectionSliderPosts
           postCardName="card9"
-          heading="Sea travel enthusiast"
-          subHeading="Over 218 articles about sea travel"
-          posts={posts.slice(0, 8)}
+          heading={seaTravel.heading}
+          subHeading={seaTravel.subHeading}
+          posts={seaTravel.posts || posts.slice(0, 8)}
         />
       </div>
 

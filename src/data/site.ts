@@ -1,5 +1,5 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { siteSettingsQuery, advertisementQuery } from '@/lib/sanity/queries'
+import { siteSettingsQuery, advertisementQuery, newsletterQuery } from '@/lib/sanity/queries'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
 
@@ -62,6 +62,38 @@ export async function getAdvertisement(): Promise<TAdvertisement> {
       if (result) return result
     } catch (error) {
       console.error('[getAdvertisement] Failed to fetch:', error)
+    }
+  }
+
+  return fallback
+}
+
+export type TNewsletter = {
+  heading: string
+  description: string
+  benefits: string[]
+  placeholder: string
+  image: { src: string; alt: string; width: number; height: number } | null
+}
+
+export async function getNewsletter(): Promise<TNewsletter> {
+  const fallback: TNewsletter = {
+    heading: 'Join our newsletter 🎉',
+    description: "Read and share new perspectives on just about any topic. Everyone's welcome.",
+    benefits: ['Get more discount', 'Get premium magazines'],
+    placeholder: 'Enter your email',
+    image: null,
+  }
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TNewsletter | null>({
+        query: newsletterQuery,
+        tags: ['newsletter'],
+      })
+      if (result) return { ...fallback, ...result }
+    } catch (error) {
+      console.error('[getNewsletter] Failed to fetch:', error)
     }
   }
 

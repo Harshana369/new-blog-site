@@ -18,18 +18,43 @@ export default defineType({
       type: 'string',
     }),
     defineField({
-      name: 'categories',
-      title: 'Tab Categories',
+      name: 'tabs',
+      title: 'Tabs',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'category' }] }],
-      description: 'Drag and drop to reorder. These appear as filter tabs above the posts.',
-    }),
-    defineField({
-      name: 'posts',
-      title: 'Posts',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'post' }] }],
-      description: 'Drag and drop to reorder. The array order determines display order.',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'category',
+              title: 'Category',
+              type: 'reference',
+              to: [{ type: 'category' }],
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'posts',
+              title: 'Posts',
+              type: 'array',
+              of: [{ type: 'reference', to: [{ type: 'post' }] }],
+              description: 'Drag and drop to reorder. The array order determines display order.',
+            }),
+          ],
+          preview: {
+            select: {
+              title: 'category.name',
+              subtitle: 'posts.length',
+            },
+            prepare({ title, subtitle }) {
+              return {
+                title: title || 'Untitled tab',
+                subtitle: `${subtitle || 0} posts`,
+              }
+            },
+          },
+        },
+      ],
+      description: 'Each tab has a category and its own curated posts. Drag and drop to reorder tabs.',
     }),
   ],
   preview: {

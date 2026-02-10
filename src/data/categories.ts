@@ -1,5 +1,5 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, latestArticlesQuery, latestAudioArticlesQuery, lifestylesQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
+import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, latestArticlesQuery, latestAudioArticlesQuery, lifestylesQuery, seaTravelQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
 import { getAllPosts, getPostsDefault, getPostsAudio, TPost } from './posts'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
@@ -137,11 +137,15 @@ export async function getLatestAudioArticlesSection(): Promise<TLatestAudioArtic
   return fallback
 }
 
+export type TLifestyleTab = {
+  category: { id: string; name: string }
+  posts: TPost[]
+}
+
 export type TLifestyles = {
   heading: string
   subHeading?: string
-  categories?: { id: string; name: string }[]
-  posts?: TPost[]
+  tabs?: TLifestyleTab[]
 }
 
 export async function getLifestylesSection(): Promise<TLifestyles> {
@@ -156,6 +160,43 @@ export async function getLifestylesSection(): Promise<TLifestyles> {
         tags: ['lifestyles'],
       })
       if (result?.heading) {
+        // For tabs without posts, fall back to recent posts
+        if (result.tabs?.length) {
+          const allPosts = await getAllPosts()
+          result.tabs = result.tabs.map(tab => ({
+            ...tab,
+            posts: tab.posts?.length ? tab.posts : allPosts.slice(0, 8),
+          }))
+        }
+        return result
+      }
+    } catch (error) {
+      console.error('[getLifestylesSection] Failed to fetch:', error)
+    }
+  }
+
+  return fallback
+}
+
+export type TSeaTravel = {
+  heading: string
+  subHeading: string
+  posts?: TPost[]
+}
+
+export async function getSeaTravelSection(): Promise<TSeaTravel> {
+  const fallback: TSeaTravel = {
+    heading: 'Sea travel enthusiast',
+    subHeading: 'Over 218 articles about sea travel',
+  }
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TSeaTravel | null>({
+        query: seaTravelQuery,
+        tags: ['seaTravel'],
+      })
+      if (result?.heading) {
         if (!result.posts?.length) {
           const allPosts = await getAllPosts()
           result.posts = allPosts.slice(0, 8)
@@ -163,7 +204,7 @@ export async function getLifestylesSection(): Promise<TLifestyles> {
         return result
       }
     } catch (error) {
-      console.error('[getLifestylesSection] Failed to fetch:', error)
+      console.error('[getSeaTravelSection] Failed to fetch:', error)
     }
   }
 

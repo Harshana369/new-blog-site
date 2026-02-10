@@ -10,5 +10,7 @@ import latestArticles from './latestArticles'
 import latestAudioArticles from './latestAudioArticles'
 import advertisement from './advertisement'
 import lifestyles from './lifestyles'
+import newsletter from './newsletter'
+import seaTravel from './seaTravel'
 
-export const schemaTypes = [post, author, category, tag, product, review, siteSettings, trendingTopics, latestArticles, latestAudioArticles, advertisement, lifestyles]
+export const schemaTypes = [post, author, category, tag, product, review, siteSettings, trendingTopics, latestArticles, latestAudioArticles, advertisement, lifestyles, newsletter, seaTravel]

@@ -340,7 +340,48 @@ export const lifestylesQuery = groq`
 *[_type == "lifestyles"][0] {
   heading,
   subHeading,
-  "categories": categories[]->{ "id": _id, name },
+  "tabs": tabs[] {
+    "category": category->{ "id": _id, name },
+    "posts": posts[]->{
+      "id": _id,
+      "featuredImage": featuredImage${imageProjection},
+      title,
+      "handle": slug.current,
+      excerpt,
+      "date": publishedAt,
+      readingTime,
+      "commentCount": 0,
+      "viewCount": 0,
+      "bookmarkCount": 0,
+      "bookmarked": false,
+      "likeCount": 0,
+      "liked": false,
+      postType,
+      status,
+      "author": author->${authorMiniProjection},
+      "categories": categories[]->${categoryMiniProjection},
+      "audioUrl": audioUrl,
+      "videoUrl": videoUrl,
+      "galleryImgs": galleryImages[].asset->url
+    }
+  }
+}`
+
+// ─── NEWSLETTER ─────────────────────────────────────────
+export const newsletterQuery = groq`
+*[_type == "newsletter"][0] {
+  heading,
+  description,
+  benefits,
+  placeholder,
+  "image": image${imageProjection}
+}`
+
+// ─── SEA TRAVEL ─────────────────────────────────────────
+export const seaTravelQuery = groq`
+*[_type == "seaTravel"][0] {
+  heading,
+  subHeading,
   "posts": posts[]->{
     "id": _id,
     "featuredImage": featuredImage${imageProjection},
