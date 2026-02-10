@@ -1,5 +1,5 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, latestArticlesQuery, latestAudioArticlesQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
+import { categoriesQuery, categoryByHandleQuery, trendingTopicsQuery, latestArticlesQuery, latestAudioArticlesQuery, lifestylesQuery, tagsQuery, tagByHandleQuery } from '@/lib/sanity/queries'
 import { getAllPosts, getPostsDefault, getPostsAudio, TPost } from './posts'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
@@ -131,6 +131,38 @@ export async function getLatestAudioArticlesSection(): Promise<TLatestAudioArtic
       }
     } catch (error) {
       console.error('[getLatestAudioArticlesSection] Failed to fetch:', error)
+    }
+  }
+
+  return fallback
+}
+
+export type TLifestyles = {
+  heading: string
+  subHeading?: string
+  posts?: TPost[]
+}
+
+export async function getLifestylesSection(): Promise<TLifestyles> {
+  const fallback: TLifestyles = {
+    heading: 'Life styles 🎨 ',
+  }
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TLifestyles | null>({
+        query: lifestylesQuery,
+        tags: ['lifestyles'],
+      })
+      if (result?.heading) {
+        if (!result.posts?.length) {
+          const allPosts = await getAllPosts()
+          result.posts = allPosts.slice(0, 8)
+        }
+        return result
+      }
+    } catch (error) {
+      console.error('[getLifestylesSection] Failed to fetch:', error)
     }
   }
 

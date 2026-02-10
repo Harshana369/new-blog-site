@@ -327,6 +327,43 @@ export const searchPostsQuery = groq`
   "galleryImgs": galleryImages[].asset->url
 }`
 
+// ─── ADVERTISEMENT ──────────────────────────────────────
+export const advertisementQuery = groq`
+*[_type == "advertisement"][0] {
+  label,
+  "image": image${imageProjection},
+  url
+}`
+
+// ─── LIFE STYLES ────────────────────────────────────────
+export const lifestylesQuery = groq`
+*[_type == "lifestyles"][0] {
+  heading,
+  subHeading,
+  "posts": posts[]->{
+    "id": _id,
+    "featuredImage": featuredImage${imageProjection},
+    title,
+    "handle": slug.current,
+    excerpt,
+    "date": publishedAt,
+    readingTime,
+    "commentCount": 0,
+    "viewCount": 0,
+    "bookmarkCount": 0,
+    "bookmarked": false,
+    "likeCount": 0,
+    "liked": false,
+    postType,
+    status,
+    "author": author->${authorMiniProjection},
+    "categories": categories[]->${categoryMiniProjection},
+    "audioUrl": audioUrl,
+    "videoUrl": videoUrl,
+    "galleryImgs": galleryImages[].asset->url
+  }
+}`
+
 // ─── SITE SETTINGS ──────────────────────────────────────
 export const siteSettingsQuery = `*[_type == "siteSettings"][0] {
   title,

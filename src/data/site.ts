@@ -1,5 +1,5 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { siteSettingsQuery } from '@/lib/sanity/queries'
+import { siteSettingsQuery, advertisementQuery } from '@/lib/sanity/queries'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
 
@@ -39,3 +39,31 @@ export async function getSiteSettings() {
 type TSiteSettings = ReturnType<typeof _getStaticSiteSettings>
 
 export { type TSiteSettings }
+
+export type TAdvertisement = {
+  label: string
+  image: { src: string; alt: string; width: number; height: number } | null
+  url: string
+}
+
+export async function getAdvertisement(): Promise<TAdvertisement> {
+  const fallback: TAdvertisement = {
+    label: '- Advertisement -',
+    image: null,
+    url: '/',
+  }
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TAdvertisement | null>({
+        query: advertisementQuery,
+        tags: ['advertisement'],
+      })
+      if (result) return result
+    } catch (error) {
+      console.error('[getAdvertisement] Failed to fetch:', error)
+    }
+  }
+
+  return fallback
+}

@@ -10,9 +10,9 @@ import SectionSliderNewCategories from '@/components/SectionSliderNewCategories'
 import SectionSliderPosts from '@/components/SectionSliderPosts'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import { getAuthors } from '@/data/authors'
-import { getCategories, getTrendingTopics, getLatestArticlesSection, getLatestAudioArticlesSection } from '@/data/categories'
+import { getCategories, getTrendingTopics, getLatestArticlesSection, getLatestAudioArticlesSection, getLifestylesSection } from '@/data/categories'
 import { getAllPosts, getPostsAudio, type TPost } from '@/data/posts'
-import { getSiteSettings } from '@/data/site'
+import { getSiteSettings, getAdvertisement } from '@/data/site'
 import HeadingWithSub from '@/shared/Heading'
 import Vector1 from '@/images/Vector1.png'
 import rightImg from '@/images/hero-right.png'
@@ -33,6 +33,8 @@ const Page = async () => {
   const trendingTopics = await getTrendingTopics()
   const latestArticles = await getLatestArticlesSection()
   const latestAudioArticles = await getLatestAudioArticlesSection()
+  const lifestyles = await getLifestylesSection()
+  const advertisement = await getAdvertisement()
   const siteSettings = await getSiteSettings()
 
   // Process hero heading - handle both \n and <br /> tags from Sanity
@@ -122,9 +124,19 @@ const Page = async () => {
         </div>
       </div>
 
-      <SectionAds />
+      <SectionAds
+        label={advertisement.label}
+        href={advertisement.url}
+        imgAds={advertisement.image?.src || undefined}
+        imgWidth={advertisement.image?.width}
+        imgHeight={advertisement.image?.height}
+      />
 
-      <SectionMagazine4 heading="Life styles 🎨 " posts={posts.slice(0, 8)} />
+      <SectionMagazine4
+        heading={lifestyles.heading}
+        subHeading={lifestyles.subHeading}
+        posts={lifestyles.posts || posts.slice(0, 8)}
+      />
 
       <div className="relative py-16 lg:py-20">
         <BackgroundSection />
