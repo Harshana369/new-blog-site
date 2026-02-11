@@ -1,5 +1,3 @@
-import { getNavMegaMenu } from '@/data/navigation'
-import { getAllPosts } from '@/data/posts'
 import { Button } from '@/shared/Button'
 import Logo from '@/shared/Logo'
 import { PlusIcon } from '@heroicons/react/24/outline'
@@ -7,7 +5,6 @@ import clsx from 'clsx'
 import { FC } from 'react'
 import AvatarDropdown from './AvatarDropdown'
 import HamburgerBtnMenu from './HamburgerBtnMenu'
-import MegaMenuPopover from './MegaMenuPopover'
 import NotifyDropdown from './NotifyDropdown'
 import SearchModal from './SearchModal'
 
@@ -17,9 +14,6 @@ interface HeaderProps {
 }
 
 const Header: FC<HeaderProps> = async ({ bottomBorder, className }) => {
-  const megamenu = await getNavMegaMenu()
-  const featuredPosts = (await getAllPosts()).slice(0, 2)
-
   return (
     <div className={clsx('relative z-20', className)}>
       <div className="container">
@@ -39,8 +33,6 @@ const Header: FC<HeaderProps> = async ({ bottomBorder, className }) => {
           </div>
 
           <div className="ms-auto flex items-center justify-end gap-x-0.5">
-            <MegaMenuPopover megamenu={megamenu} featuredPosts={featuredPosts} className="hidden lg:block" />
-            <div className="ms-6 me-3 hidden h-8 border-l lg:block" />
             <div className="hidden sm:block">
               <Button className="h-10 px-3!" href={'/submission'} plain>
                 <PlusIcon className="size-5!" />
