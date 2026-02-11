@@ -1,15 +1,21 @@
-import { Facebook01Icon, Mail01Icon, NewTwitterIcon, YoutubeIcon } from '@hugeicons/core-free-icons'
+import { Facebook01Icon, Mail01Icon, NewTwitterIcon, YoutubeIcon, InstagramIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { FC } from 'react'
 
-interface Props {
-  className?: string
-  socials?: typeof socialsDemo
+type SocialItem = {
+  name: string
+  href: string
+  icon?: any
 }
 
-const socialsDemo = [
+interface Props {
+  className?: string
+  socials?: SocialItem[]
+}
+
+const socialsDemo: SocialItem[] = [
   {
     name: 'Facebook',
     href: 'https://www.facebook.com/',
@@ -32,6 +38,21 @@ const socialsDemo = [
   },
 ]
 
+const iconMap: Record<string, any> = {
+  facebook: Facebook01Icon,
+  email: Mail01Icon,
+  mail: Mail01Icon,
+  twitter: NewTwitterIcon,
+  x: NewTwitterIcon,
+  youtube: YoutubeIcon,
+  instagram: InstagramIcon,
+}
+
+function getIcon(social: SocialItem) {
+  if (social.icon) return social.icon
+  return iconMap[social.name.toLowerCase()] || Mail01Icon
+}
+
 const SocialsList1: FC<Props> = ({ className, socials = socialsDemo }) => {
   return (
     <div className={clsx('flex flex-col gap-y-4', className)}>
@@ -43,7 +64,7 @@ const SocialsList1: FC<Props> = ({ className, socials = socialsDemo }) => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <HugeiconsIcon icon={item.icon} size={20} />
+          <HugeiconsIcon icon={getIcon(item)} size={20} />
           {item.name}
         </Link>
       ))}

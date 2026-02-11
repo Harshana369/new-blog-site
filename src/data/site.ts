@@ -1,5 +1,5 @@
 import { sanityFetch } from '@/lib/sanity/fetcher'
-import { siteSettingsQuery, advertisementQuery, newsletterQuery, videosSectionQuery } from '@/lib/sanity/queries'
+import { siteSettingsQuery, advertisementQuery, newsletterQuery, videosSectionQuery, footerQuery } from '@/lib/sanity/queries'
 
 const isSanityConfigured = !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id'
 
@@ -125,6 +125,48 @@ export async function getVideosSection(): Promise<TVideosSection> {
       if (result) return result
     } catch (error) {
       console.error('[getVideosSection] Failed to fetch:', error)
+    }
+  }
+
+  return fallback
+}
+
+export type TFooterMenu = {
+  id: string
+  title: string
+  links: { label: string; href: string }[]
+}
+
+export type TFooterSocialLink = {
+  name: string
+  href: string
+}
+
+export type TFooterLogo = {
+  src: string
+  alt: string
+  width: number
+  height: number
+}
+
+export type TFooter = {
+  logo?: TFooterLogo | null
+  menus?: TFooterMenu[]
+  socialLinks?: TFooterSocialLink[]
+}
+
+export async function getFooter(): Promise<TFooter> {
+  const fallback: TFooter = {}
+
+  if (isSanityConfigured) {
+    try {
+      const result = await sanityFetch<TFooter | null>({
+        query: footerQuery,
+        tags: ['footer'],
+      })
+      if (result) return result
+    } catch (error) {
+      console.error('[getFooter] Failed to fetch:', error)
     }
   }
 

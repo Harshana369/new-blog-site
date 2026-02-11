@@ -1,6 +1,9 @@
 import { CustomLink } from '@/data/types'
+import { getFooter, TFooterSocialLink } from '@/data/site'
 import Logo from '@/shared/Logo'
 import SocialsList1 from '@/shared/SocialsList1'
+import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 export interface WidgetFooterMenu {
@@ -9,7 +12,7 @@ export interface WidgetFooterMenu {
   menus: CustomLink[]
 }
 
-const widgetMenus: WidgetFooterMenu[] = [
+const defaultWidgetMenus: WidgetFooterMenu[] = [
   {
     id: '5',
     title: 'Getting started',
@@ -56,7 +59,24 @@ const widgetMenus: WidgetFooterMenu[] = [
   },
 ]
 
-const Footer: React.FC = () => {
+const Footer: React.FC = async () => {
+  const footerData = await getFooter()
+
+  const widgetMenus: WidgetFooterMenu[] = footerData.menus?.length
+    ? footerData.menus.map((menu) => ({
+        id: menu.id,
+        title: menu.title,
+        menus: menu.links.map((link) => ({ label: link.label, href: link.href })),
+      }))
+    : defaultWidgetMenus
+
+  const socialLinks = footerData.socialLinks?.length
+    ? footerData.socialLinks.map((s: TFooterSocialLink) => ({
+        name: s.name,
+        href: s.href,
+      }))
+    : undefined
+
   const renderWidgetMenuItem = (menu: WidgetFooterMenu, index: number) => {
     return (
       <div key={index} className="text-sm">
@@ -85,10 +105,22 @@ const Footer: React.FC = () => {
         <div className="container grid grid-cols-2 gap-x-5 gap-y-10 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-5 lg:gap-x-10">
           <div className="col-span-2 grid grid-cols-4 gap-5 md:col-span-4 lg:flex lg:flex-col lg:md:col-span-1">
             <div className="col-span-2 md:col-span-1">
-              <Logo size="size-10" />
+              {footerData.logo?.src ? (
+                <Link href="/" className="inline-block">
+                  <Image
+                    src={footerData.logo.src}
+                    alt={footerData.logo.alt || 'Site logo'}
+                    width={footerData.logo.width}
+                    height={footerData.logo.height}
+                    className="size-10 object-contain"
+                  />
+                </Link>
+              ) : (
+                <Logo size="size-10" />
+              )}
             </div>
             <div className="col-span-2 flex items-center md:col-span-3">
-              <SocialsList1 />
+              <SocialsList1 socials={socialLinks} />
             </div>
           </div>
           {widgetMenus.map(renderWidgetMenuItem)}

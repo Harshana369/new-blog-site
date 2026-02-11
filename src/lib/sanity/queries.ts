@@ -529,6 +529,18 @@ export const siteSettingsQuery = `*[_type == "siteSettings"][0] {
   "heroUnderlineImage": heroUnderlineImage${imageProjection}
 }`
 
+// ─── FOOTER ─────────────────────────────────────────────
+export const footerQuery = groq`
+*[_type == "footer"][0] {
+  "logo": logo${imageProjection},
+  "menus": menus[] {
+    "id": _key,
+    title,
+    "links": links[] { label, href }
+  },
+  "socialLinks": socialLinks[] { name, href }
+}`
+
 // ─── REVIEW POSTS ───────────────────────────────────────
 export const reviewPostsQuery = groq`
 *[_type == "post" && status == "published" && postType == "review"] | order(publishedAt desc) {
